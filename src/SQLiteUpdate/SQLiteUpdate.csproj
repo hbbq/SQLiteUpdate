@@ -61,7 +61,7 @@
     <Compile Include="Db.cs" />
     <Compile Include="HistoryHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SQLiteConnectionExtensions.cs" />
+    <Compile Include="DbConnectionExtensions.cs" />
     <Compile Include="UpdateResult.cs" />
     <Compile Include="UpdateScript.cs" />
   </ItemGroup>

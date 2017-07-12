@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.SQLite;
 using System.Linq;
 using System.Text;
@@ -8,15 +9,15 @@ using System.Threading.Tasks;
 namespace SQLiteUpdate
 {
 
-    internal static class SQLiteConnectionExtensions
+    internal static class DbConnectionExtensions
     {
 
-        public static object QueryScalar(this SQLiteConnection @this, string statement)
+        public static object QueryScalar(this DbConnection @this, string statement)
         {
             return @this.QueryScalar(statement, null);
         }
 
-        public static object QueryScalar(this SQLiteConnection @this, string statement, object parameters)
+        public static object QueryScalar(this DbConnection @this, string statement, object parameters)
         {
             using (var cm = @this.CreateCommand(statement, parameters))
             {
@@ -24,12 +25,12 @@ namespace SQLiteUpdate
             }
         }
 
-        public static int NonQuery(this SQLiteConnection @this, string statement)
+        public static int NonQuery(this DbConnection @this, string statement)
         {
             return @this.NonQuery(statement, null);
         }
 
-        public static int NonQuery(this SQLiteConnection @this, string statement, object parameters)
+        public static int NonQuery(this DbConnection @this, string statement, object parameters)
         {
             using (var cm = @this.CreateCommand(statement, parameters))
             {
@@ -37,7 +38,7 @@ namespace SQLiteUpdate
             }
         }
 
-        public static SQLiteCommand CreateCommand(this SQLiteConnection @this, string statement, object parameters)
+        public static DbCommand CreateCommand(this DbConnection @this, string statement, object parameters)
         {
 
             if (@this.State != System.Data.ConnectionState.Open) @this.Open();
@@ -49,7 +50,10 @@ namespace SQLiteUpdate
             {
                 foreach(var prop in parameters.GetType().GetProperties().Where(p => p.CanRead))
                 {
-                    cm.Parameters.AddWithValue(prop.Name, prop.GetValue(parameters));
+                    var parameter = cm.CreateParameter();
+                    parameter.ParameterName = prop.Name;
+                    parameter.Value = prop.GetValue(parameters);
+                    cm.Parameters.Add(parameter);
                 }
             }
 
