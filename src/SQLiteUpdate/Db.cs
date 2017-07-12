@@ -1,14 +1,25 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data.SQLite;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace SQLiteUpdate
 {
 
-    internal class Db
+    public class Db
     {
 
-        private SQLite.SQLiteConnection connection;
+        public static UpdateResult UpdateFromScripts(SQLiteConnection connection, IEnumerable<UpdateScript> scripts)
+        {
 
+            var historyHandler = new HistoryHandler(connection);
+            historyHandler.Init();
 
+            return null;
+
+        }
 
     }
 
