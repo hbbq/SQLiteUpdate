@@ -14,10 +14,33 @@ namespace SQLiteUpdate
         public static UpdateResult UpdateFromScripts(SQLiteConnection connection, IEnumerable<UpdateScript> scripts)
         {
 
+            if (scripts == null) return new UpdateResult { Successful = false };
+
+            var result = new UpdateResult
+            {
+                Successful = false,
+                ExecutedScripts = new List<UpdateScript>()
+            };
+
             var historyHandler = new HistoryHandler(connection);
             historyHandler.Init();
 
-            return null;
+            var scriptsToRun = scripts.Where(s => !historyHandler.HasScriptExecuted(s.Identity));
+
+            foreach(var script in scriptsToRun)
+            {
+
+                connection.NonQuery(script.Script);
+
+                historyHandler.LogScriptExecution(script);
+
+                result.ExecutedScripts.Add(script);
+
+            }
+
+            result.Successful = true;
+
+            return result;
 
         }
 

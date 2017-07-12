@@ -37,20 +37,53 @@ namespace SQLiteUpdate
                     from sqlite_master 
                     where type = @type
                         and name = @name
-                    ;
                     ",
-                    new { type = "table", name = Tablename }
+                    new {
+                        type = "table",
+                        name = Tablename
+                    }
                 )?.ToString() ?? "";
 
-            if(name != Tablename)
-            {
-
-                Connection.NonQuery(Tabledefinition);
-
-            }
+            if(name != Tablename) Connection.NonQuery(Tabledefinition);
 
         }
-    
+
+        public bool HasScriptExecuted(string identity)
+        {
+            return
+                Connection.QueryScalar($@"
+                    select count(*)
+                    from {Tablename}
+                    where Identity = @identity
+                    ",
+                    new { identity = identity }
+                ).ToString() != "0";
+        }
+
+        public void LogScriptExecution(UpdateScript script)
+        {
+            LogScriptExecution(script.Identity, script.Script);
+        }
+
+        public void LogScriptExecution(string identity, string script)
+        {
+            Connection.NonQuery($@"
+                insert into {Tablename} (
+                    Identity,
+                    Script
+                ) values (
+                    @identity,
+                    @script
+                )
+                ",
+                new
+                {
+                    identity = identity,
+                    script = script,
+                }
+            );
+        }
+
     }
 
 }
