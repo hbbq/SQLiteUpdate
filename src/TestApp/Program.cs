@@ -22,7 +22,7 @@ namespace TestApp
             using(var cn = new SQLiteConnection($@"Data source={filename}"))
             {
 
-                SQLiteUpdate.Db.UpdateFromResources(cn, System.Reflection.Assembly.GetExecutingAssembly(), "TestApp.DbScripts");
+                SQLiteUpdate.Db.UpdateFromResources(cn, System.Reflection.Assembly.GetExecutingAssembly(), "TestApp.DbScripts.Test");
 
                 using (var da = new SQLiteDataAdapter("select * from test", cn))                
                 using (var ds = new DataSet())

@@ -26,9 +26,9 @@ namespace SQLiteUpdate
         public void Init()
         {
 
-            var name =
+            var exists =
                 Connection.QueryScalar(@"
-                    select name
+                    select count(*)
                     from sqlite_master 
                     where type = @type
                         and name = @name
@@ -37,9 +37,9 @@ namespace SQLiteUpdate
                         type = "table",
                         name = Tablename
                     }
-                )?.ToString() ?? "";
+                ).ToString() != "0";
 
-            if(name != Tablename) Connection.NonQuery(Tabledefinition);
+            if(!exists) Connection.NonQuery(Tabledefinition);
 
         }
 
