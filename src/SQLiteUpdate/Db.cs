@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SQLiteUpdate
 {
@@ -23,15 +20,15 @@ namespace SQLiteUpdate
                 ExecutedScripts = new List<UpdateScript>()
             };
 
-            var historyHandler = new HistoryHandler(connection);
-            historyHandler.Init();
+            var history = new HistoryHandler(connection);
+            history.Init();
 
-            var scriptsToRun = scripts.Where(s => !historyHandler.HasScriptExecuted(s.Identity));
+            var scriptsToRun = scripts.Where(s => !history.HasScriptExecuted(s.Identity));
 
             foreach(var script in scriptsToRun)
             {
                 connection.NonQuery(script.Script);
-                historyHandler.LogScriptExecution(script);
+                history.LogScriptExecution(script);
                 result.ExecutedScripts.Add(script);
             }
 
@@ -44,22 +41,19 @@ namespace SQLiteUpdate
         public static UpdateResult UpdateFromResources(SQLiteConnection connection, Assembly resourceAssembly, string containingNamespace)
         {
 
-            var names =
-                resourceAssembly.GetManifestResourceNames()
-                .Where(r => r.StartsWith(containingNamespace + "."));
-
-            var scripts = new List<UpdateScript>();
-
-            foreach(var name in names)
-            {
-                using (var stream = resourceAssembly.GetManifestResourceStream(name))
-                using (var reader = new System.IO.StreamReader(stream))
-                {
-                    var identity = name.Substring(containingNamespace.Length + 1);
-                    var script = reader.ReadToEnd();
-                    scripts.Add(new UpdateScript { Identity = identity, Script = script });
-                }
-            }
+            var scripts = resourceAssembly.GetManifestResourceNames()
+                .Where(n => n.StartsWith(containingNamespace + "."))
+                .Select(name =>
+                    {
+                        using (var stream = resourceAssembly.GetManifestResourceStream(name))
+                        using (var reader = new System.IO.StreamReader(stream))
+                        return new UpdateScript
+                        {
+                            Identity = name.Substring(containingNamespace.Length + 1),
+                            Script = reader.ReadToEnd()
+                        };                        
+                    }
+                ).ToList();
 
             return UpdateFromScripts(connection, scripts);
 
