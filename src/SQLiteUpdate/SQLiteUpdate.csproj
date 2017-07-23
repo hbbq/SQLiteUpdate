@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DbMap, Version=0.1.43.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\HBBq.DbMap.0.1.43-Develop\lib\net45\DbMap.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -49,7 +52,6 @@
     <Compile Include="Db.cs" />
     <Compile Include="HistoryHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DbConnectionExtensions.cs" />
     <Compile Include="UpdateResult.cs" />
     <Compile Include="UpdateScript.cs" />
   </ItemGroup>

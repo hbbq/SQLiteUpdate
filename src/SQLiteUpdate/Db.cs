@@ -2,6 +2,7 @@
 using System.Data.SQLite;
 using System.Linq;
 using System.Reflection;
+using DbMap;
 
 namespace SQLiteUpdate
 {
@@ -27,7 +28,7 @@ namespace SQLiteUpdate
 
             foreach(var script in scriptsToRun)
             {
-                connection.NonQuery(script.Script);
+                connection.ExecuteNonQuery(script.Script);
                 history.LogScriptExecution(script);
                 result.ExecutedScripts.Add(script);
             }

@@ -1,4 +1,5 @@
 ﻿using System.Data.SQLite;
+using DbMap;
 
 namespace SQLiteUpdate
 {
@@ -27,7 +28,7 @@ namespace SQLiteUpdate
         {
 
             var exists =
-                Connection.QueryScalar(@"
+                Connection.ExecuteScalar<int>(@"
                     select count(*)
                     from sqlite_master 
                     where type = @type
@@ -37,22 +38,22 @@ namespace SQLiteUpdate
                         type = "table",
                         name = Tablename
                     }
-                ).ToString() != "0";
+                ) != 0;
 
-            if(!exists) Connection.NonQuery(Tabledefinition);
+            if(!exists) Connection.ExecuteNonQuery(Tabledefinition);
 
         }
 
         public bool HasScriptExecuted(string identity)
         {
             return
-                Connection.QueryScalar($@"
+                Connection.ExecuteScalar<int>($@"
                     select count(*)
                     from {Tablename}
                     where Identity = @identity
                     ",
                     new { identity = identity }
-                ).ToString() != "0";
+                ) != 0;
         }
 
         public void LogScriptExecution(UpdateScript script)
@@ -62,7 +63,7 @@ namespace SQLiteUpdate
 
         public void LogScriptExecution(string identity, string script)
         {
-            Connection.NonQuery($@"
+            Connection.ExecuteNonQuery($@"
                 insert into {Tablename} (
                     Identity,
                     Script
