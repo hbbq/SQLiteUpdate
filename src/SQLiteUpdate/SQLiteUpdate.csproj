@@ -32,8 +32,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DbMap, Version=0.1.43.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\HBBq.DbMap.0.1.43-Develop\lib\net45\DbMap.dll</HintPath>
+    <Reference Include="DbMap, Version=0.1.51.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\HBBq.DbMap.0.1.51\lib\net452\DbMap.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -57,7 +57,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.105.2\build\net451\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.105.2\build\net451\System.Data.SQLite.Core.targets')" />
