@@ -19,10 +19,7 @@ namespace SQLiteUpdate
 
         private SQLiteConnection Connection { get; }
 
-        public HistoryHandler(SQLiteConnection connection)
-        {
-            Connection = connection;
-        }
+        public HistoryHandler(SQLiteConnection connection) => Connection = connection;
 
         public void Init()
         {
@@ -56,10 +53,7 @@ namespace SQLiteUpdate
                 ) != 0;
         }
 
-        public void LogScriptExecution(UpdateScript script)
-        {
-            LogScriptExecution(script.Identity, script.Script);
-        }
+        public void LogScriptExecution(UpdateScript script) => LogScriptExecution(script.Identity, script.Script);
 
         public void LogScriptExecution(string identity, string script)
         {
