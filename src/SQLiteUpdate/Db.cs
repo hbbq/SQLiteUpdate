@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Linq;
 using System.Reflection;
@@ -47,7 +48,7 @@ namespace SQLiteUpdate
                 .Select(name =>
                     {
                         using (var stream = resourceAssembly.GetManifestResourceStream(name))
-                        using (var reader = new System.IO.StreamReader(stream))
+                        using (var reader = new System.IO.StreamReader(stream ?? throw new InvalidOperationException()))
                         return new UpdateScript
                         {
                             Identity = name.Substring(containingNamespace.Length + 1),

@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TestApp
 {
@@ -12,7 +8,7 @@ namespace TestApp
     class Program
     {
 
-        static void Main(string[] args)
+        static void Main()
         {
             
             var filename = "test.sqlite";

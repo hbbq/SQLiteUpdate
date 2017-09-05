@@ -1,5 +1,6 @@
 ﻿using System.Data.SQLite;
 using DbMap;
+// ReSharper disable RedundantAnonymousTypePropertyName
 
 namespace SQLiteUpdate
 {
